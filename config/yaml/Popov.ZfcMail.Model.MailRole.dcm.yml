@@ -1,0 +1,44 @@
+Popov\ZfcMail\Model\MailRole:
+  type: entity
+  table: mail_role
+  fields:
+    id:
+      id: true
+      type: integer
+      generator:
+        strategy: AUTO
+      options:
+        unsigned: true
+  #oneToOne:
+  #  role:
+  #    targetEntity: Popov\Roles\Model\Roles
+  #    fetch: EAGER
+  #    joinColumn:
+  #      name: roleId
+  #      referencedColumnName: id
+  manyToOne:
+    mail:
+      targetEntity: Popov\ZfcMail\Model\Mail
+      inversedBy: mailRoles
+      joinColumn:
+        name: mailId
+        referencedColumnName: id
+    role:
+      targetEntity: Popov\ZfcRole\Model\Role
+      fetch: EAGER
+      joinColumn:
+        name: roleId
+        referencedColumnName: id
+  #manyToMany:
+  #  permissionSettings:
+  #    targetEntity: Popov\ZfcPermission\Model\PermissionSettings
+  #    fetch: EAGER
+  #    joinTable:
+  #      name: mail_role_setting
+  #      joinColumns:
+  #        mailRoleId:
+  #          referencedColumnName: id
+  #      inverseJoinColumns:
+  #        permissionSettingId:
+  #          referencedColumnName: id
+  #          #unique: true

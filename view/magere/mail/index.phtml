@@ -1,0 +1,75 @@
+<?php
+$this->plugin('translate')->setTranslatorTextDomain('Popov\Permission');
+$controller = $this->layout()->route->getParam('controller');
+?>
+
+<div class="header-content-layout form-header">
+	<ul class="line1">
+		<li>
+			<?=$this->buttons('addItem', ['add' => [
+				'href'			=> $this->url('default', [
+					'controller'	=> $controller,
+					'action'		=> 'add'
+				]),
+				'controller'	=> $controller,
+				'action'		=> 'add',
+			]])?>
+		</li>
+	</ul>
+</div>
+<div class="body-content-layout">
+
+	<div class="panel-fixed">
+
+	<!-- content -->
+	<table class="table-content tableborder width ankets_tbl">
+		<thead class="CmsHeader">
+		<tr>
+			<td><?=$fields['id']?></td>
+			<td><?=$fields['type']?></td>
+			<td><?=$fields['status']?></td>
+			<td><?=$fields['emailTo']?></td>
+			<td><?=$fields['theme']?></td>
+		</tr>
+		</thead>
+	</table>
+</div>
+<table class="cmsMainText ankets_tbl tableborder table-content table-info-row">
+	<tbody>
+	<?php /** @var \Popov\ZfcMail\Model\Mail $item */
+	foreach ($items as $item) { ?>
+		<tr>
+			<td><?=$item[0]->getId()?></td>
+			<td><?=$this->translate($item[0]->getType())?></td>
+			<td>
+				<a href="<?=$this->url('default/id', [
+					'controller'	=> $controller,
+					'action'		=> 'edit',
+					'id'			=> $item[0]->getId()
+				])?>">
+					<?=$item['status'].' ('.$this->translate($item['mnemo']).')'?>
+				</a>
+			</td>
+			<td>
+				<?php
+				$i = 0;
+				foreach ($item[0]->getMailOption() as $option)
+				{
+					if ($i > 0)
+					{
+						echo ', ';
+					}
+
+					echo $option->getEmailTo();
+
+					++$i;
+				}
+				?>
+
+			</td>
+			<td><?=$item[0]->getTheme()?></td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+</div>

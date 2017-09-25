@@ -1,0 +1,59 @@
+Popov\ZfcMail\Model\Mail:
+  type: entity
+  table: mail
+  repositoryClass: Popov\ZfcMail\Model\Repository\MailRepository
+  fields:
+    id:
+      id: true
+      type: integer
+      generator:
+        strategy: AUTO
+      options:
+        unsigned: true
+    action:
+     type: string
+     length: 32
+     nullable: false
+    theme:
+     type: string
+     length: 255
+    body:
+      type: text
+    hidden:
+      type: string
+      default: '0'
+    type:
+      type: string
+      length: 255
+      default: 'mail'
+    #statusId:
+    #  type: integer
+    #  options:
+    #    unsigned: true
+    info:
+      type: text
+    lastDateCron:
+      type: date
+      nullable: true
+  oneToMany:
+    mailOption:
+      targetEntity: Popov\ZfcMail\Model\MailOption
+      mappedBy: mail
+    mailOptionRole: #@deprecated
+      targetEntity: Popov\ZfcMail\Model\MailOptionRole
+      mappedBy: mail
+    mailRoles:
+      targetEntity: Popov\ZfcMail\Model\MailRole
+      mappedBy: mail
+  manyToOne:
+  #  status:
+  #    targetEntity: Popov\Status\Model\Status
+  #    inversedBy: mail
+  #    joinColumn:
+  #      name: statusId
+  #      referencedColumnName: id
+  #  entity:
+  #      targetEntity: Popov\ZfcEntity\Model\Entity
+  #      joinColumn:
+  #        name: entityId
+  #        referencedColumnName: id

@@ -1,0 +1,152 @@
+<?php
+/** @var \Popov\ZfcMail\View\Helper\MailHelper $mailHelper */
+$mailHelper = $this->mail();
+
+/** @var \Popov\Status\View\Helper\StatusHelper $statusHelper */
+$statusHelper = $this->status();
+
+$controller = $this->current('route')->getParam('controller');
+$action = $this->current('route')->getParam('action');
+
+$tooltipBody = (! empty($notation)) ? 'Можно добавить такие переменные: <br>'.str_replace(';', '<br>', $notation) : '';
+?>
+
+<?=$this->form()->openTag($form)?>
+	<table class="CmsMainText table-content tableborder tableinput">
+		<thead>
+		<tr class="CmsHeader">
+			<td width="200" align="center">Параметр</td>
+			<td colspan="4" width="400" align="left">Значение</td>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td><?=$fields['type']?></td>
+			<td colspan="4">
+				<?php $formName = $form->get('type'); ?>
+				<select name="type"><?=$mailHelper->typeList($formName->getValue())?></select>
+				<?=$this->formElementerrors($formName)?>
+			</td>
+		</tr>
+		<tr>
+			<td><?=$fields['status']?></td>
+			<td colspan="4">
+				<?php $formName = $form->get('statusId'); ?>
+				<select name="statusId"<?=' '.$formName->getAttribute('required')?>><?=$statusHelper->statusList($formName->getValue(), '', '')?></select>
+				<?=$this->formElementerrors($formName)?>
+			</td>
+		</tr>
+		<tr>
+			<td><?=$fields['emailTo']?></td>
+			<td colspan="4"><?=$this->formRow($form->get('emailTo'))?></td>
+		</tr>
+		<tr>
+			<td><?=$fields['theme']?></td>
+			<td colspan="4"><?=$this->formRow($form->get('theme'))?></td>
+		</tr>
+		<tr>
+			<td>
+				<?=$fields['body']?>
+				<?php if ($tooltipBody) { ?>
+				<img src="/media/images/hint.png" width="16" height="16" class="tooltipTdHover">
+				<div class="tooltipTd">
+					<p><?=$tooltipBody?></p>
+				</div>
+				<?php } ?>
+			</td>
+			<td colspan="4">
+				<?php $formName = $form->get('body'); ?>
+				<textarea name="body"<?=$formName->getAttribute('required')?>><?=$formName->getValue()?></textarea>
+				<?=$this->formElementerrors($formName)?>
+			</td>
+		</tr>
+		<tr>
+			<td><?=$fields['accessDocument']?></td>
+			<td colspan="4"><?=$this->formRow($form->get('accessDocument'))?></td>
+		</tr>
+		<tr>
+			<td colspan="5"></td>
+		</tr>
+		<thead>
+		<tr class="CmsHeader">
+			<td width="200" align="center">Название роли</td>
+			<td width="100" align="left">Роль</td>
+			<td width="100" align="left">По городу создателя документа</td>
+			<td width="100" align="left">По бренду события</td>
+			<td width="100" align="left">Город в</td>
+		</tr>
+		</thead>
+		<?php
+		foreach ($roles as $item) {
+			$mailOptionRoleId = null;
+			$checkedCityCreator = '';
+			$checkedByBrand = '';
+			$checkedCityIn = '';
+			$classHidden = '';
+
+			if (isset($itemsOptionRole[$item->getId()]))
+			{
+				$mailOptionRoleId = $itemsOptionRole[$item->getId()]->getId();
+
+				if ($itemsOptionRole[$item->getId()]->getCityCreator())
+				{
+					$checkedCityCreator = ' checked';
+				}
+
+				if ($itemsOptionRole[$item->getId()]->getByBrand())
+				{
+					$checkedByBrand = ' checked';
+				}
+
+				if ($itemsOptionRole[$item->getId()]->getCityIn())
+				{
+					$checkedCityIn = ' checked';
+				}
+			}
+
+			$checked = $mailOptionRoleId ? ' checked' : '';
+
+			 if ($checked == '')
+			 {
+				 $classHidden = ' class="hidden"';
+			 } ?>
+			<tr>
+				<td><?=$item->getRole()?></td>
+				<td>
+					<input type="hidden" name="mailOptionRoleId[<?=$item->getId()?>]" value="<?=$mailOptionRoleId?>">
+					<input type="checkbox" class="changeCheckedCheckbox" name="mailOptionRole[<?=$item->getId()?>]"<?=$checked?>>
+				</td>
+				<td>
+					<input type="checkbox"<?=$classHidden?> name="cityCreator[<?=$item->getId()?>]"<?=$checkedCityCreator?>>
+				</td>
+				<td>
+					<input type="checkbox"<?=$classHidden?> name="byBrand[<?=$item->getId()?>]"<?=$checkedByBrand?>>
+				</td>
+				<td>
+					<input type="checkbox"<?=$classHidden?> name="cityIn[<?=$item->getId()?>]"<?=$checkedCityIn?>>
+				</td>
+			</tr>
+		<?php } ?>
+		</tbody>
+		<tfoot>
+		<tr>
+			<td colspan="5">
+				<div class="button-place">
+					<?php
+					$buttonsArgs['save'] = [
+						'type'       => 'submit',
+						'attr'       => [
+							'class' => 'button',
+						],
+						'controller' => $controller,
+						'action'     => $action,
+					];
+
+					echo $this->buttons('saveItem', $buttonsArgs);
+					?>
+				</div>
+			</td>
+		</tr>
+		</tfoot>
+	</table>
+<?=$this->form()->closeTag()?>

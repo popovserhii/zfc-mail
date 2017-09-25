@@ -1,0 +1,41 @@
+Popov\ZfcMail\Model\MailOptionRole:
+  type: entity
+  table: mail_option_role
+  fields:
+    id:
+      id: true
+      type: integer
+      generator:
+        strategy: AUTO
+      options:
+        unsigned: true
+    roleId:
+      type: integer
+      options:
+        unsigned: true
+    mailId:
+      type: integer
+      options:
+        unsigned: true
+    cityCreator:
+      type: string
+      default: '0'
+    byBrand:
+      type: string
+      default: '0'
+    cityIn:
+      type: string
+      default: '0'
+  manyToOne:
+    mail:
+      targetEntity: Popov\ZfcMail\Model\Mail
+      inversedBy: mailOptionRole
+      joinColumn:
+        name: mailId
+        referencedColumnName: id
+    roles:
+      targetEntity: Popov\ZfcRole\Model\Role
+      inversedBy: mailOptionRole
+      joinColumn:
+        name: roleId
+        referencedColumnName: id

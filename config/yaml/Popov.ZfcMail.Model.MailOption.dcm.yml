@@ -1,0 +1,31 @@
+Popov\ZfcMail\Model\MailOption:
+  type: entity
+  table: mail_option
+  fields:
+    id:
+      id: true
+      type: integer
+      generator:
+        strategy: AUTO
+      options:
+        unsigned: true
+    period:
+      type: integer
+      default: 1
+    emailTo:
+      type: string
+      length: 255
+    mailId:
+      type: integer
+      options:
+        unsigned: true
+    step:
+      type: integer
+      default: 1
+  manyToOne:
+    mail:
+      targetEntity: Popov\ZfcMail\Model\Mail
+      inversedBy: mailOption
+      joinColumn:
+        name: mailId
+        referencedColumnName: id
