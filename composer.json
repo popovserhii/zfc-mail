@@ -22,5 +22,11 @@
     "psr-4": {
       "Popov\\ZfcMail\\": "src/"
     }
-  }
+  },
+  "extra": {
+    "zf": {
+      "component": "Popov\\ZfcMail",
+      "config-provider": "Popov\\ZfcMail\\ConfigProvider"
+    }
+  }  
 }
